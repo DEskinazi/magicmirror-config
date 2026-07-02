@@ -28,6 +28,7 @@ Based on [yohaybn/MMM-JewishDate](https://github.com/yohaybn/MMM-JewishDate). Ch
 ### MMM-MyGCalendar (patched)
 Based on a module originally shared by user johnster000 on the MagicMirror forum. Changes made:
 - Adjusted the display window to start at the current week instead of including one week in the past
+**Config-level customization (see `config.js.example`, no code change):** the module's built-in `colorRules` option is used to give each family member a distinct event color, matched by keyword against the event title (e.g. a rule matching a specific name colors any event containing that name in its title). This is name-based text matching, not a per-person calendar assignment — an event only gets colored if the person's name literally appears in its title.
 
 ## Other Modules Used (Unmodified)
 

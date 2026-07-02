@@ -28,6 +28,23 @@ let config = {
 			}
 		},
 		{
+			module: "MMM-MyGCalendar",
+			position: "top_center",
+			config: {
+			    calendars: [
+				{
+				    name: "Your Calendar",
+				    url: "https://calendar.google.com/calendar/ical/YOUR_PRIVATE_CALENDAR_URL/basic.ics",
+			    	    color: "#228B22"
+				}
+			    ],
+			    colorRules: [
+				{ keyword: "PersonOneName", color: "#8E24AA" },
+				{ keyword: "PersonTwoName", color: "#00897B" }
+			    ]
+			}
+		},
+		{
 			module: "MMM-GoogleTasks",
 			header: "To-Do",
 			position: "top_left",
