@@ -29,6 +29,13 @@ Based on [yohaybn/MMM-JewishDate](https://github.com/yohaybn/MMM-JewishDate). Ch
 Based on a module originally shared by user johnster000 on the MagicMirror forum. Changes made:
 - Adjusted the display window to start at the current week instead of including one week in the past
 
+## Other Modules Used (Unmodified)
+
+These modules are used as-is, with no code changes — only configuration (see `config.js.example`):
+
+- [MMM-NOAAForecast](https://github.com/supermem613/MMM-NOAAForecast) — weather forecast, no API key required (US only)
+- [MMM-NewsFeedTicker](https://github.com/justjim1220/MMM-NewsFeedTicker) — scrolling news ticker
+
 ## Setup
 
 1. Copy `config.js.example` to `config/config.js` and fill in your own values (coordinates, PIN, calendar URLs, task list names).
