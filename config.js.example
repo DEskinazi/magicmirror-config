@@ -1,0 +1,51 @@
+// This is a SANITIZED EXAMPLE config. Copy to config.js and fill in your own values.
+// Never commit your real config.js, credentials.json, or token.json.
+
+let config = {
+	// ... standard MagicMirror config (address, port, etc.) ...
+
+	modules: [
+		{
+			module: "MMM-ChoreTracker",
+			position: "bottom_left",
+			config: {
+				pin: "YOUR_PARENT_PIN_HERE",
+				kids: [
+					{
+						id: "kid1",
+						name: "Kid One",
+						zone: "Zone Owner",
+						allowanceThreshold: 85,
+						weeklyAllowance: 14,
+						dailyChores: [
+							{ id: "example1", label: "Example daily chore" }
+						],
+						weeklyChores: [
+							{ id: "example2", label: "Example weekly chore", timesPerWeek: 1 }
+						]
+					}
+				]
+			}
+		},
+		{
+			module: "MMM-GoogleTasks",
+			header: "To-Do",
+			position: "top_left",
+			config: {
+				credentialPath: "/path/to/your/credentials.json",
+				tokenPath: "/path/to/your/token.json",
+				ordering: "due",
+				maxResults: 100,
+				displayLimit: 6,
+				accounts: [
+					{
+						name: "household",
+						includedLists: ["YourListName1", "YourListName2"]
+					}
+				]
+			}
+		}
+	]
+};
+
+if (typeof module !== "undefined") { module.exports = config; }

@@ -1,0 +1,71 @@
+.MMM-GoogleTasks {
+  font-size: 0.8em;
+
+  .container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    transform: translateY(-0.6em);
+  }
+
+  .item {
+    text-align: right;
+    padding-bottom: 0.25em;
+
+    .date {
+      padding: .1em .75em;
+      margin: 0em .5em;
+      text-align: center;
+      color: white;
+      font-size: 1.0em;
+      border-radius: 25px;
+    }
+
+    .overdue {
+      background-color: red;
+    }
+
+    .soon {
+      background-color: #c75112;
+    }
+
+    .upcoming {
+      background-color: green;
+    }
+
+    .notes {
+      padding-left: 0.95em;
+      font-size: 0.8em;
+      padding-bottom: 0;
+    }
+
+    .child {
+      text-align: left;
+      padding-left: 1.5em;
+    }
+
+    .title {
+      float: inline-end;
+    }
+  }
+
+  .fa {
+    vertical-align: middle;
+    padding-bottom: 0.25em;
+    padding-right: 0.25em;
+    font-size: 0.6em;
+  }
+
+  ul {
+    padding-left: 0px;
+    margin-top: 0px;
+    list-style-type: none;
+
+    li {
+      list-style-position: inside;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 1.99;
+    }
+  }
+}
