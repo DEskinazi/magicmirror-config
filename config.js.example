@@ -20,6 +20,9 @@ let config = {
 						dailyChores: [
 							{ id: "example1", label: "Example daily chore" }
 						],
+						// weeklyChores is optional — omit it entirely for a kid who
+						// only has daily chores (their allowance % is then based
+						// purely on daily completion).
 						weeklyChores: [
 							{ id: "example2", label: "Example weekly chore", timesPerWeek: 1 }
 						]
@@ -31,6 +34,12 @@ let config = {
 			module: "MMM-MyGCalendar",
 			position: "top_center",
 			config: {
+			    // Overrides the module's default white card background
+			    // (--gcal-bg). Must go through this config option, not a
+			    // custom.css override of --gcal-bg — the module sets that
+			    // variable via an inline style, which always wins over a
+			    // stylesheet rule for the same element/property.
+			    backgroundColor: "#FFF8ED",
 			    calendars: [
 				{
 				    name: "Your Calendar",
@@ -42,6 +51,23 @@ let config = {
 				{ keyword: "PersonOneName", color: "#8E24AA" },
 				{ keyword: "PersonTwoName", color: "#00897B" }
 			    ]
+			}
+		},
+		{
+			module: "MMM-NOAAForecast",
+			header: "Weather",
+			position: "top_right",
+			config: {
+				latitude: "YOUR_LATITUDE",
+				longitude: "YOUR_LONGITUDE",
+				iconset: "3c",
+				concise: false,
+				forecastLayout: "table",
+				showHourlyForecast: false, // daily forecast only, no hourly rows
+				frameWidth: 260            // default is 300; narrower to avoid
+				                            // bleeding past the module's frame
+				                            // once font sizes are increased
+				                            // (see custom.css)
 			}
 		},
 		{

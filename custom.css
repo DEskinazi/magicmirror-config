@@ -1,0 +1,137 @@
+/* Custom overrides for the live MagicMirror install.
+ * Loaded last (after main.css and all module CSS), so anything here wins.
+ * Deploy by copying this file to config/custom.css on the Pi and restarting
+ * the magicmirror.service (systemd --user unit) or the mirror won't pick it up.
+ */
+
+/* MMM-NewsFeedTicker: dark background + hide article images.
+ * (Module is currently commented out in config.js, so this is dormant
+ * until it's re-enabled.) */
+body .region.bottom.bar .MMM-NewsFeedTicker,
+.MMM-NewsFeedTicker {
+        background: #0d1b2a !important;
+}
+.MMM-NewsFeedTicker .image {
+	display: none;
+}
+
+/* ── MMM-MyGCalendar: widen the calendar's region ──
+ * Default top_center region shrink-wraps to content; forcing it (and the
+ * module/module-content inside it) to a fixed % of the screen lets the
+ * calendar grid actually use that width instead of staying narrow. */
+.region.top.center {
+	width: 70%;
+	max-width: 70%;
+	flex: 0 0 70%;
+}
+
+.region.top.center .module {
+	width: 100%;
+	max-width: 100%;
+	flex: 0 0 auto;
+}
+
+/* ── MMM-MyGCalendar: larger text throughout the grid ── */
+.gcal-wrapper .gcal-month-title   { font-size: 26px; }
+.gcal-wrapper .gcal-day-header    { font-size: 16px; }
+.gcal-wrapper .gcal-day-month-tag { font-size: 14px; }
+.gcal-wrapper .gcal-day-number    { font-size: 19px; }
+.gcal-wrapper .gcal-event-label   { font-size: 20px; }
+
+/* Event row/day-cell height must grow along with gcal-event-label's font,
+ * or the bigger text clips inside the original fixed-height rows. */
+.gcal-wrapper .gcal-event { height: 26px; }
+.gcal-wrapper .gcal-day-events {
+  height: calc(var(--gcal-max-events, 3) * 26px + (var(--gcal-max-events, 3) - 1) * 4px);
+}
+
+/* ── MMM-MyGCalendar: plain frame around the whole calendar ──
+ * (An earlier attempt used an SVG "hand-drawn wiggle" background-image
+ * frame here — it kept rendering incorrectly on this Electron/Chromium
+ * build, so we settled on a plain solid border instead. Background color
+ * itself is NOT set here — it's controlled by the module's own
+ * `backgroundColor` config option in config.js, since that's applied via
+ * an inline style that would otherwise beat any CSS override of --gcal-bg.) */
+.gcal-wrapper {
+  border: 4px solid #8C8C8C;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.region.top.center .module-content {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+.MMM-MyGCalendar,
+.MMM-MyGCalendar .gcal-wrapper,
+.MMM-MyGCalendar .gcal-card {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+/* ── MMM-ChoreTracker: layout ──
+ * Isolina (config order: 1st) and Liora (2nd) render as two side-by-side
+ * cards. Liora's card is capped narrower and pulled left so the calendar
+ * above (now wider, see top.center rules above) doesn't overlap it. The
+ * transform nudges the whole block's position slightly; padding is kept
+ * tight top/bottom so the border hugs the header and last row closely. */
+.chore-tracker {
+  gap: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 6px 18px 2px;
+  transform: translate(-5px, 6px);
+}
+.ct-card:nth-child(2) { max-width: 150px; }
+
+/* ── Global body margins ──
+ * MagicMirror's default is 60px on all four sides. Right is kept higher
+ * than the others because the physical mirror's bezel covers more of the
+ * right edge than top/left/bottom on this unit. */
+:root {
+  --gap-body-left: 15px;
+  --gap-body-right: 50px;
+  --gap-body-top: 5px;
+  --gap-body-bottom: 15px;
+}
+
+.ct-card:nth-child(2) { margin-left: -30px; }
+
+/* ── MMM-ChoreTracker: larger text, allowance meter hidden ──
+ * The %/payout bar is still computed server-side (node_helper.js) — this
+ * only hides its on-screen display, it doesn't stop the tracking. */
+.ct-name  { font-size: 28px; }
+.ct-zone  { font-size: 17px; }
+.ct-label { font-size: 21px; }
+.ct-box   { font-size: 17px; }
+
+.ct-bar-wrap { display: none; }
+
+/* ── MMM-NOAAForecast: larger text (paired with config.js frameWidth
+ * and showHourlyForecast — see config.js.example) ── */
+.MMM-NOAAForecast .wrapper.table .forecast-container { font-size: 20px; }
+.MMM-NOAAForecast .wrapper.table .forecast-container .forecast-item > span,
+.MMM-NOAAForecast .wrapper.table .forecast-container .header-row > span { font-size: 20px; }
+.MMM-NOAAForecast .wrapper.table .forecast-container .header-row > span { font-size: 16px; }
+.MMM-NOAAForecast .current-conditions-wrapper .current.feelslike { font-size: 21px; }
+.MMM-NOAAForecast .current-conditions-wrapper .feelslike-label { font-size: 13px; }
+
+/* Column widths trimmed back down to fit frameWidth now that the bigger
+ * font above would otherwise make the wind/precipitation columns bleed
+ * past the module's frame. */
+.MMM-NOAAForecast .wrapper.table .forecast-container .forecast-item > span,
+.MMM-NOAAForecast .wrapper.table .forecast-container .header-row > span {
+  padding: 4px 1px;
+}
+.MMM-NOAAForecast .wrapper.table .forecast-container .forecast-item .precipitation-container {
+  min-width: 3.4em;
+}
+.MMM-NOAAForecast .wrapper.table .forecast-container .forecast-item .wind-container {
+  min-width: 2.6em;
+}
+
+/* ── MMM-GoogleTasks: larger text ── */
+.MMM-GoogleTasks { font-size: 1.1em; }
+.MMM-GoogleTasks header { font-size: 16px; }
