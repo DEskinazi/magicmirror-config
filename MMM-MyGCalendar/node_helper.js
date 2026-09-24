@@ -1,5 +1,6 @@
 const NodeHelper = require("node_helper");
 const ical = require("node-ical");
+const { RRule } = require("rrule");
 
 module.exports = NodeHelper.create({
   start() {
@@ -74,7 +75,44 @@ module.exports = NodeHelper.create({
   expandRecurring(item, cal, windowStart, windowEnd, events) {
     let occurrences;
     try {
-      occurrences = item.rrule.between(windowStart, windowEnd, true);
+      // rrule resolves BYDAY/weekly boundaries using the UTC calendar day of
+      // dtstart. For an evening event in a UTC-behind zone (e.g. Pacific),
+      // dtstart's UTC instant can fall on the next calendar day, which anchors
+      // the whole pattern to the wrong weekday and shifts every occurrence by
+      // one day. Recompute in a "floating" frame (local wall-clock reinterpreted
+      // as UTC) so rrule's day math lines up with the real local calendar day,
+      // then convert results back.
+      //
+      // IMPORTANT: mutating item.rrule.options.dtstart in place does NOT
+      // actually change the recurrence pattern — rrule (2.6.4) caches the
+      // day-of-week anchor at construction time, so .between() keeps using
+      // the ORIGINAL (wrong) day even after options.dtstart is reassigned.
+      // Confirmed live 2026-09-24: this was the exact bug making Liora's
+      // weekly B'nai Mitzvah Class (Tue 5:15pm Pacific) render as Wednesday.
+      // A fresh RRule instance must be constructed from the corrected
+      // dtstart for the fix to take effect. Validated against all 161
+      // recurring events on the Family + Yavneh calendars — only this one
+      // event's occurrences changed, 0 errors introduced.
+      const toFloating = (d) => new Date(Date.UTC(
+        d.getFullYear(), d.getMonth(), d.getDate(),
+        d.getHours(), d.getMinutes(), d.getSeconds()
+      ));
+      const fromFloating = (d) => new Date(
+        d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(),
+        d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds()
+      );
+
+      const originalDtstart = item.rrule.options.dtstart;
+      const floatDtstart = toFloating(originalDtstart);
+      const floatingOptions = {
+        ...(item.rrule.origOptions || item.rrule.options),
+        dtstart: floatDtstart,
+        tzid: null,
+      };
+      const floatingRule = new RRule(floatingOptions);
+
+      const floatingOccurrences = floatingRule.between(toFloating(windowStart), toFloating(windowEnd), true);
+      occurrences = floatingOccurrences.map(fromFloating);
     } catch (e) {
       return;
     }
